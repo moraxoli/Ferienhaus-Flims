@@ -5,12 +5,13 @@ import { getFamilyNames } from "@/lib/familyNames";
 import EinstellungenClient from "./EinstellungenClient";
 import FamilienNamenClient from "./FamilienNamenClient";
 import PasswortResetClient from "./PasswortResetClient";
+import ReinigungsEmailClient from "./ReinigungsEmailClient";
 
 export default async function EinstellungenPage() {
   const session = await auth();
   const isAdmin = session!.user.role === Role.ADMIN;
 
-  const [familyNames, familyUsers] = await Promise.all([
+  const [familyNames, familyUsers, cleaningEmailSetting] = await Promise.all([
     isAdmin ? getFamilyNames() : Promise.resolve(null),
     isAdmin
       ? db.user.findMany({
@@ -19,6 +20,9 @@ export default async function EinstellungenPage() {
           orderBy: { role: "asc" },
         })
       : Promise.resolve([]),
+    isAdmin
+      ? db.setting.findUnique({ where: { key: "cleaningEmail" } })
+      : Promise.resolve(null),
   ]);
 
   return (
@@ -33,6 +37,9 @@ export default async function EinstellungenPage() {
           initialName1={familyNames[Role.FAMILY_1]}
           initialName2={familyNames[Role.FAMILY_2]}
         />
+      )}
+      {isAdmin && (
+        <ReinigungsEmailClient initialEmail={cleaningEmailSetting?.value ?? ""} />
       )}
       {isAdmin && familyUsers.length > 0 && (
         <PasswortResetClient users={familyUsers} />

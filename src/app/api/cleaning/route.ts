@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
 
   const cleaning = await db.cleaning.create({
     data: { date: cleaningDate, note: note || null },
+    include: { booking: true },
   });
 
   try {

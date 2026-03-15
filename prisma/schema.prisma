@@ -122,6 +122,11 @@ enum Decision {
   REJECTED
 }
 
+model Setting {
+  key   String @id
+  value String
+}
+
 enum NotificationType {
   BOOKING_ASSIGNED
   WEEK_RELEASED
