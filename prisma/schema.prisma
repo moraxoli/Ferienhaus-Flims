@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id               String         @id @default(cuid())
+  name             String
+  email            String         @unique
+  password         String
+  plainPassword    String?        // Klartext-Passwort, nur für Admin sichtbar
+  role             Role
+  bookings         Booking[]
+  approvals        Approval[]
+  messages         Message[]
+  notifications    Notification[]
+  additionalEmails UserEmail[]
+  createdAt        DateTime       @default(now())
+}
+
+model UserEmail {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  label     String?  // z.B. "Mann", "Frau", "Grosseltern"
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  family        Role
+  startDate     DateTime
+  endDate       DateTime
+  season        Season
+  status        BookingStatus
+  note          String?
+  withCleaning  Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  createdBy     User          @relation(fields: [createdById], references: [id])
+  createdById   String
+  approvals     Approval[]
+  cleaning      Cleaning?
+  presences     Presence[]
+}
+
+model Approval {
+  id           String   @id @default(cuid())
+  booking      Booking  @relation(fields: [bookingId], references: [id])
+  bookingId    String
+  approvedBy   User     @relation(fields: [approvedById], references: [id])
+  approvedById String
+  decision     Decision
+  comment      String?
+  createdAt    DateTime @default(now())
+}
+
+model Cleaning {
+  id        String    @id @default(cuid())
+  date      DateTime
+  booking   Booking?  @relation(fields: [bookingId], references: [id])
+  bookingId String?   @unique
+  note      String?
+  createdAt DateTime  @default(now())
+}
+
+model Presence {
+  id         String   @id @default(cuid())
+  booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId  String
+  memberName String
+  startDate  DateTime
+  endDate    DateTime
+  createdAt  DateTime @default(now())
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  content     String
+  senderName  String?  // Vorname des Absenders (z.B. "Oli", "Anna")
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  user      User             @relation(fields: [userId], references: [id])
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  read      Boolean          @default(false)
+  linkHref  String?
+  createdAt DateTime         @default(now())
+}
+
+enum Role {
+  ADMIN
+  FAMILY_1
+  FAMILY_2
+}
+
+enum Season {
+  WINTER
+  SUMMER
+}
+
+enum BookingStatus {
+  ASSIGNED
+  RELEASED
+  REQUESTED
+  APPROVED
+  REJECTED
+}
+
+enum Decision {
+  APPROVED
+  REJECTED
+}
+
+enum NotificationType {
+  BOOKING_ASSIGNED
+  WEEK_RELEASED
+  REQUEST_PENDING
+  REQUEST_APPROVED
+  REQUEST_REJECTED
+  NEW_MESSAGE
+  CLEANING_SCHEDULED
+}
