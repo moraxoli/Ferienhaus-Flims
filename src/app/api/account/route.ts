@@ -16,7 +16,7 @@ export async function PATCH(req: NextRequest) {
 
   if (email?.trim() && email.trim() !== user.email) {
     const existing = await db.user.findUnique({ where: { email: email.trim() } });
-    if (existing) return NextResponse.json({ error: "Diese E-Mail-Adresse wird bereits verwendet." }, { status: 400 });
+    if (existing) return NextResponse.json({ error: "Dieser Loginname wird bereits verwendet." }, { status: 400 });
     updates.email = email.trim();
   }
 
