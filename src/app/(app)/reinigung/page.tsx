@@ -6,6 +6,7 @@ import ReinigungClient from "./ReinigungClient";
 export default async function ReinigungPage() {
   const session = await auth();
   const isAdmin = session?.user.role === Role.ADMIN;
+  const currentUserId = session?.user.id ?? "";
 
   const [cleanings, cleaningEmailSetting] = await Promise.all([
     db.cleaning.findMany({ include: { booking: true }, orderBy: { date: "asc" } }),
@@ -18,6 +19,7 @@ export default async function ReinigungPage() {
       <ReinigungClient
         cleanings={cleanings}
         isAdmin={isAdmin}
+        currentUserId={currentUserId}
         cleaningEmail={cleaningEmailSetting?.value ?? ""}
       />
     </div>

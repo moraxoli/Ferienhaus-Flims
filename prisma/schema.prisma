@@ -18,6 +18,7 @@ model User {
   messages         Message[]
   notifications    Notification[]
   additionalEmails UserEmail[]
+  cleanings        Cleaning[]
   createdAt        DateTime       @default(now())
 }
 
@@ -59,12 +60,14 @@ model Approval {
 }
 
 model Cleaning {
-  id        String    @id @default(cuid())
-  date      DateTime
-  booking   Booking?  @relation(fields: [bookingId], references: [id])
-  bookingId String?   @unique
-  note      String?
-  createdAt DateTime  @default(now())
+  id          String    @id @default(cuid())
+  date        DateTime
+  booking     Booking?  @relation(fields: [bookingId], references: [id])
+  bookingId   String?   @unique
+  note        String?
+  createdBy   User?     @relation(fields: [createdById], references: [id])
+  createdById String?
+  createdAt   DateTime  @default(now())
 }
 
 model Presence {
