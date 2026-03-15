@@ -198,19 +198,17 @@ export default function ReinigungClient({
       <div className="bg-white rounded-xl shadow p-6">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
           <h2 className="text-lg font-semibold">Alle Reinigungstermine</h2>
-          {isAdmin && (
-            <button onClick={() => setShowModal(true)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                changes.length > 0 ? "bg-orange-500 hover:bg-orange-600 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600"
-              }`}>
-              ✉ Reinigungsfirma informieren
-              {changes.length > 0 && (
-                <span className="bg-white text-orange-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {changes.length}
-                </span>
-              )}
-            </button>
-          )}
+          <button onClick={() => setShowModal(true)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              changes.length > 0 ? "bg-orange-500 hover:bg-orange-600 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600"
+            }`}>
+            ✉ Reinigungsfirma informieren
+            {changes.length > 0 && (
+              <span className="bg-white text-orange-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {changes.length}
+              </span>
+            )}
+          </button>
         </div>
         {currentCleanings.length === 0 ? (
           <p className="text-gray-500 text-sm">Keine Termine vorhanden.</p>

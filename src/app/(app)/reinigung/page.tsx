@@ -10,7 +10,7 @@ export default async function ReinigungPage() {
 
   const [cleanings, cleaningEmailSetting] = await Promise.all([
     db.cleaning.findMany({ include: { booking: true }, orderBy: { date: "asc" } }),
-    isAdmin ? db.setting.findUnique({ where: { key: "cleaningEmail" } }) : Promise.resolve(null),
+    db.setting.findUnique({ where: { key: "cleaningEmail" } }),
   ]);
 
   return (
