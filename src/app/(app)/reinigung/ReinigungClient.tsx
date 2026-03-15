@@ -174,8 +174,7 @@ export default function ReinigungClient({
 
   return (
     <div className="space-y-6">
-      {isAdmin && (
-        <div className="bg-white rounded-xl shadow p-6">
+      <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-lg font-semibold mb-4">Reinigung bestellen</h2>
           <form onSubmit={handleOrder} className="flex flex-wrap gap-3 items-end">
             <div>
@@ -195,7 +194,6 @@ export default function ReinigungClient({
             </button>
           </form>
         </div>
-      )}
 
       <div className="bg-white rounded-xl shadow p-6">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
