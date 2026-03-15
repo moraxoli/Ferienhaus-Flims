@@ -167,7 +167,7 @@ export default function KalenderClient({
           culture="de"
           views={["month"]}
           defaultView="month"
-          components={{ event: EventComponent as React.ComponentType<{ event: object }> }}
+          components={{ event: EventComponent as any }}
           date={calDate}
           onNavigate={(date) => setCalDate(date)}
           messages={{
